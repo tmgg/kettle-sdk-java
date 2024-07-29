@@ -32,7 +32,7 @@ jobs:
 
 
     - name: Publish
-      run: mvn deploy
+      run: mvn -q deploy
       env:
         MAVEN_USERNAME: ${{ secrets.USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.PASSWORD }}
