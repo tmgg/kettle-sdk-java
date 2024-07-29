@@ -4,7 +4,7 @@
 name: Maven Publish
 
 on:
- # workflow_dispatch:
+  workflow_dispatch:
 
   release:
     types: [created]
@@ -30,9 +30,11 @@ jobs:
         gpg-passphrase: MAVEN_GPG_PASSPHRASE
         gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
 
-
+    - name: check version
+      run: mvn -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec -q
     - name: Publish
-      run: mvn -q deploy
+      run: echo 'done'
+      #run: mvn -q deploy
       env:
         MAVEN_USERNAME: ${{ secrets.USERNAME }}
         MAVEN_PASSWORD: ${{ secrets.PASSWORD }}
