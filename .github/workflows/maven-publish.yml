@@ -30,10 +30,19 @@ jobs:
         server-password: MAVEN_PASSWORD
         gpg-passphrase: MAVEN_GPG_PASSPHRASE
         gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-    - name: tag version
+
+    - name: git  version # refs/tags/v0.0.5
       run: echo ${{ github.ref }}
-    - name: check version
+    - name: pom version # 0.0.1
       run: mvn -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec -q
+    - name: export pom version
+      run: export PROJECT_VERSION=$(mvn -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec -q)
+    - name: echo
+      run: echo $PROJECT_VERSION
+
+    - name: validate version
+      run:
+
     - name: Publish
       run: echo 'done'
       #run: mvn -q deploy
