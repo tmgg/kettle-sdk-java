@@ -1,25 +1,23 @@
-package cn.tmgg.kettle.sdk.vo;
-
+package io.github.tmgg.kettle.sdk.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 
-import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SlaveServerJobStatus {
+public class SlaveServerTransStatus {
+  public static final String XML_TAG = "transstatus";
 
-  @JacksonXmlProperty(localName = "jobname")
-  private String jobName;
   private String id;
 
+  @JacksonXmlProperty(localName = "transname")
+  private String transName;
 
   @JacksonXmlProperty(localName = "status_desc")
   private String statusDescription;
@@ -32,19 +30,20 @@ public class SlaveServerJobStatus {
   @JacksonXmlProperty(localName = "logging_string")
   private String loggingString;
 
-
   @JacksonXmlProperty(localName = "first_log_line_nr")
   private int firstLoggingLineNr;
-
 
   @JacksonXmlProperty(localName = "last_log_line_nr")
   private int lastLoggingLineNr;
 
-
   @JacksonXmlProperty(localName = "log_date")
   private Date logDate;
 
+  @JacksonXmlProperty(localName = "stepstatuslist")
+  private List<StepStatus> stepStatusList;
 
+  @JacksonXmlProperty(localName = "paused")
+  private boolean paused;
 
 
 }

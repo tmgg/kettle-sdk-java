@@ -1,4 +1,4 @@
-package cn.tmgg.kettle.sdk;
+package io.github.tmgg.kettle.sdk;
 
 import lombok.Getter;
 import lombok.Setter;

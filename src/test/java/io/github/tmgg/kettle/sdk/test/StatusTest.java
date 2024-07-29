@@ -1,9 +1,9 @@
-package cn.tmgg.kettle.sdk.test;
+package io.github.tmgg.kettle.sdk.test;
 
 import cn.moon.lang.json.JsonTool;
-import cn.tmgg.kettle.sdk.AbstructTest;
-import cn.tmgg.kettle.sdk.KettleSdk;
-import cn.tmgg.kettle.sdk.vo.SlaveServerStatus;
+import io.github.tmgg.kettle.sdk.AbstructTest;
+import io.github.tmgg.kettle.sdk.KettleSdk;
+import io.github.tmgg.kettle.sdk.vo.SlaveServerStatus;
 
 public class StatusTest extends AbstructTest {
 

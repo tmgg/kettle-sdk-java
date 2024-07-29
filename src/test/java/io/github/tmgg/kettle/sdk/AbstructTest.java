@@ -1,4 +1,4 @@
-package cn.tmgg.kettle.sdk;
+package io.github.tmgg.kettle.sdk;
 
 public class AbstructTest {
     public static String url = "http://127.0.0.1:8080";

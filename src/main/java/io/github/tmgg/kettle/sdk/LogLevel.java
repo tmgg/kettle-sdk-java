@@ -1,4 +1,4 @@
-package cn.tmgg.kettle.sdk;
+package io.github.tmgg.kettle.sdk;
 
 // pentaho-kettle\core\src\main\java\org\pentaho\di\core\logging\LogLevel.java
 public enum LogLevel {

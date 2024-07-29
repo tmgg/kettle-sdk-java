@@ -1,4 +1,4 @@
-package cn.tmgg.kettle.sdk.vo;
+package io.github.tmgg.kettle.sdk.vo;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;

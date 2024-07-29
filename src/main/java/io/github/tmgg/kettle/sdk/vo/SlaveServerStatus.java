@@ -20,35 +20,51 @@
  *
  ******************************************************************************/
 
-package cn.tmgg.kettle.sdk.vo;
+package io.github.tmgg.kettle.sdk.vo;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import lombok.Getter;
 import lombok.Setter;
-import org.w3c.dom.Node;
-
-import java.util.Date;
 
 
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SlaveServerDetection {
+public class SlaveServerStatus {
+  public static final String XML_TAG = "serverstatus";
 
-  public static final String XML_TAG = "SlaveServerDetection";
+  @JacksonXmlProperty(localName = "statusdesc")
+  private String statusDescription;
 
+  private String errorDescription;
 
+  @JacksonXmlProperty(localName = "memory_free")
+  private long memoryFree;
 
-  @JacksonXmlProperty(localName = "active")
-  private String active;
+  @JacksonXmlProperty(localName = "memory_total")
+  private long memoryTotal;
 
-  @JacksonXmlProperty(localName = "last_active_date")
-  private Date lastActiveDate;
+  @JacksonXmlProperty(localName = "cpu_cores")
+  private int cpuCores;
 
-  @JacksonXmlProperty(localName = "last_inactive_date")
-  private Date lastInactiveDate;
+  @JacksonXmlProperty(localName = "cpu_process_time")
+  private long cpuProcessTime;
 
+  private long uptime;
 
+  @JacksonXmlProperty(localName = "thread_count")
+  private int threadCount;
 
+  @JacksonXmlProperty(localName = "load_avg")
+  private double loadAvg;
+
+  @JacksonXmlProperty(localName = "os_name")
+  private String osName;
+
+  @JacksonXmlProperty(localName = "os_version")
+  private String osVersion;
+
+  @JacksonXmlProperty(localName = "os_arch")
+  private String osArchitecture;
 }
