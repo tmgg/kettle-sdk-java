@@ -5,14 +5,11 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import lombok.Getter;
 import lombok.Setter;
 
-
-import javax.xml.bind.annotation.XmlRootElement;
-import java.util.*;
+import java.util.List;
 
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
-@XmlRootElement
 public class StepStatus {
   public static final String XML_TAG = "stepstatus";
 
