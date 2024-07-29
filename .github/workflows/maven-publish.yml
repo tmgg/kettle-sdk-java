@@ -11,6 +11,33 @@ on:
       - v*
 
 jobs:
+
+  check-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get project verion
+        uses: actions/setup-java@v4
+        with:
+          java-version: '11'
+          distribution: 'temurin'
+        run: |
+          pv=$(mvn -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec -q)
+          echo "::set-output name=pv::$pv"
+          
+      - name: Regex Match
+        id: regex-match
+        run: |
+          result=$(printf ${{github.ref_name}} | perl -ne 'printf if /^v(?P<major>0|[1-9]\d*)\.(?P<minor>0|[1-9]\d*)\.(?P<patch>0|[1-9]\d*)(?:-(?P<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+(?P<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$/')
+          echo "::set-output name=result::$result"
+      - name: Check Tag
+        if: ${{ steps.regex-match.outputs.result != github.ref_name }}
+        uses: actions/github-script@v4
+        with:
+          script: core.setFailed('Invalid Tag:${{github.ref_name}}')
+
+
+
   build:
 
     runs-on: ubuntu-latest
