@@ -28,8 +28,8 @@ jobs:
       - name: git tag version
         id: tv
         uses: revam/gh-action-get-tag-and-version@v1
-  with:
-    tag: ${{ github.ref }}
+        with:
+          tag: ${{ github.ref }}
    
       - name: Check Tag
         if: ${{ steps.pv.outputs.pv != steps.tv.outputs.version}}
