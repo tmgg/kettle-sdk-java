@@ -41,7 +41,7 @@ jobs:
       run: echo $PROJECT_VERSION
 
     - name: validate version
-      run:
+      run: echo 'okk'
 
     - name: Publish
       run: echo 'done'
