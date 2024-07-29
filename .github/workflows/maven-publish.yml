@@ -15,12 +15,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: project verion
-        id: pv
+      - name: set java
         uses: actions/setup-java@v4
         with:
           java-version: '11'
           distribution: 'temurin'
+
+      - name: project verion
+        id: pv
         run: |
           pv=$(mvn -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec -q)
           echo "::set-output name=pv::$pv"
