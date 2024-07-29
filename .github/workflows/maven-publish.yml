@@ -29,7 +29,8 @@ jobs:
         server-password: MAVEN_PASSWORD
         gpg-passphrase: MAVEN_GPG_PASSPHRASE
         gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-
+    - name: tag version
+      run: echo ${{ github.ref }}
     - name: check version
       run: mvn -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec -q
     - name: Publish
