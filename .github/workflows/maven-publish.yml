@@ -22,12 +22,13 @@ jobs:
       with:
         java-version: '8'
         distribution: 'temurin'
-        settings-path: ${{ github.workspace }} # location for the settings.xml file
-
+        server-username: MAVEN_USERNAME
+        server-password: MAVEN_PASSWORD
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
     - name: Publish to GitHub Packages Apache Maven
       run: mvn deploy -s $GITHUB_WORKSPACE/settings.xml
       env:
-        GITHUB_TOKEN: ${{ github.token }}
+        MAVEN_USERNAME: ${{ secrets.USERNAME }}
+        MAVEN_PASSWORD: ${{ secrets.PASSWORD }}
