@@ -1,5 +1,4 @@
-# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
-# For more information see: https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#apache-maven-with-a-settings-path
+# https://github.com/actions/setup-java/blob/main/docs/advanced-usage.md#apache-maven-with-a-settings-path
 
 name: Maven Publish
 
@@ -58,17 +57,6 @@ jobs:
         gpg-passphrase: MAVEN_GPG_PASSPHRASE
         gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
 
-    - name: git  version # refs/tags/v0.0.5
-      run: echo ${{ github.ref }}
-    - name: pom version # 0.0.1
-      run: mvn -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec -q
-    - name: export pom version
-      run: export PROJECT_VERSION=$(mvn -Dexec.executable='echo' -Dexec.args='${project.version}' --non-recursive exec:exec -q)
-    - name: echo
-      run: echo $PROJECT_VERSION
-
-    - name: validate version
-      run: echo 'okk'
 
     - name: Publish
       run: echo 'done'
