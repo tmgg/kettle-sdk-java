@@ -34,10 +34,10 @@ jobs:
           tag: ${{ github.ref }}
    
       - name: Check Tag
-        if: ${{ steps.pv.outputs.pv != steps.tv.outputs.version}}
+        if: ${{ steps.pv.outputs.pv != steps.tv.outputs.version_short}}
         uses: actions/github-script@v4
         with:
-          script: core.setFailed('Invalid Tag:${{github.ref_name}} project version:${{steps.pv.outputs.pv}} tag version:${{steps.tv.outputs.version}} ')
+          script: core.setFailed('Invalid Tag:${{github.ref_name}} project version:${{steps.pv.outputs.pv}} tag version:${{steps.tv.outputs.version_short}} ')
 
 
 
