@@ -14,11 +14,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: set java
+      - name: Set up JDK 11
         uses: actions/setup-java@v4
         with:
           java-version: '11'
           distribution: 'temurin'
+          server-id: central
+          server-username: MAVEN_USERNAME
+          server-password: MAVEN_PASSWORD
+          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+          gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
 
       - name: project verion
         id: pv
@@ -38,24 +43,10 @@ jobs:
         with:
           script: core.setFailed('Invalid Tag:${{github.ref_name}} project version:${{steps.pv.outputs.pv}} tag version:${{steps.tv.outputs.version_short}} ')
 
-
-
-    - name: Set up JDK 11
-      uses: actions/setup-java@v4
-      with:
-        java-version: '11'
-        distribution: 'temurin'
-        server-id: central
-        server-username: MAVEN_USERNAME
-        server-password: MAVEN_PASSWORD
-        gpg-passphrase: MAVEN_GPG_PASSPHRASE
-        gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-
-
-    - name: Publish
-      run: echo 'done'
-      #run: mvn -q deploy
-      env:
-        MAVEN_USERNAME: ${{ secrets.USERNAME }}
-        MAVEN_PASSWORD: ${{ secrets.PASSWORD }}
-        MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE_KEY }}
+      - name: Publish
+        run: echo 'done'
+        #run: mvn -q deploy
+        env:
+          MAVEN_USERNAME: ${{ secrets.USERNAME }}
+          MAVEN_PASSWORD: ${{ secrets.PASSWORD }}
+          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE_KEY }}
