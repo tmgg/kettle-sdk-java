@@ -1,8 +1,8 @@
 package io.github.tmgg.kettle.sdk;
 
 import cn.moon.lang.json.XmlTool;
-import io.github.tmgg.kettle.sdk.vo.SlaveServerStatus;
-import io.github.tmgg.kettle.sdk.vo.WebResult;
+import io.github.tmgg.kettle.sdk.response.SlaveServerStatus;
+import io.github.tmgg.kettle.sdk.response.WebResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.kevinsawicki.http.HttpRequest;
 
