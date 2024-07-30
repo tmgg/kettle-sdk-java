@@ -1,6 +1,12 @@
 # Usage
 
-
+```
+<dependency>
+    <groupId>io.github.tmgg</groupId>
+    <artifactId>kettle-sdk-java</artifactId>
+    <version>0.0.1</version>
+</dependency>
+```
 
 # api
 
