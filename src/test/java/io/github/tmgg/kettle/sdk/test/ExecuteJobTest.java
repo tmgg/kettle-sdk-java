@@ -9,9 +9,9 @@ import io.github.tmgg.kettle.sdk.Result;
 public class ExecuteJobTest extends AbstructTest {
 
     public static void main(String[] args) {
-        KettleSdk sdk = new KettleSdk(url, username, password);
+        KettleSdk sdk = new KettleSdk(url,repo,  username, password);
 
-        Result result = sdk.executeJob(repo, "job1", LogLevel.DEBUG,null);
+        Result result = sdk.executeJob("job1", LogLevel.DEBUG,null);
         System.out.println(JsonTool.toPrettyJsonQuietly(result));
     }
 }
