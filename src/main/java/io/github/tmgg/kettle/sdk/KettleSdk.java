@@ -18,9 +18,12 @@ public class KettleSdk {
     private String username;
     private String password;
 
+    private String rep;
 
-    public KettleSdk(String url, String username, String password) {
+
+    public KettleSdk(String url, String repo, String username, String password) {
         this.baseUrl = url;
+        this.rep = repo;
         this.username = username;
         this.password = password;
     }
@@ -46,7 +49,6 @@ public class KettleSdk {
 
     /**
      *
-     * @param rep
      * @param trans
      * @param level
      * @param otherParameters All the other parameters will be sent to the transformation for using as variables. When necessary you can add custom parameters to the request. They will be used to set the transformation variables values..
@@ -54,7 +56,7 @@ public class KettleSdk {
      *
      * https://javadoc.pentaho.com/kettle930/kettle-engine-9.3.0.0-424-javadoc/org/pentaho/di/www/RunTransServlet.html
      */
-    public Result executeTrans(String rep, String trans, LogLevel level,Map<String, Object> otherParameters) {
+    public Result executeTrans(String trans, LogLevel level,Map<String, Object> otherParameters) {
         String url = baseUrl + "/kettle/executeTrans/?rep=" + rep + "&trans=" + trans + "&level=" + level.getCode();
         return common_get(url, otherParameters);
     }
@@ -63,7 +65,6 @@ public class KettleSdk {
 
     /***
      *
-     * @param rep
      * @param job
      * @param level
      * @param otherParameters All the other parameters will be sent to the job for using as variables. When necessary you can add custom parameters to the request. They will be used to set the job variables values.
@@ -71,7 +72,7 @@ public class KettleSdk {
      *
      * https://javadoc.pentaho.com/kettle930/kettle-engine-9.3.0.0-424-javadoc/org/pentaho/di/www/ExecuteJobServlet.html
      */
-    public Result executeJob(String rep, String job, LogLevel level, Map<String, Object> otherParameters) {
+    public Result executeJob(String job, LogLevel level, Map<String, Object> otherParameters) {
         String url = baseUrl + "/kettle/executeJob/?rep=" + rep + "&job=" + job + "&level=" + level.getCode();
 
 
