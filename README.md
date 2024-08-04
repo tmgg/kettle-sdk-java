@@ -1,12 +1,13 @@
 # Usage
-
+[版本](https://img.shields.io/maven-central/v/io.github.tmgg/kettle-sdk-java)
 ```
 <dependency>
     <groupId>io.github.tmgg</groupId>
     <artifactId>kettle-sdk-java</artifactId>
-    <version>0.0.1</version>
+    <version>版本</version>
 </dependency>
 ```
+
 
 # api
 
