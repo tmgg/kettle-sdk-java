@@ -1,5 +1,5 @@
 # Usage
-[版本](https://img.shields.io/maven-central/v/io.github.tmgg/kettle-sdk-java)
+![版本](https://img.shields.io/maven-central/v/io.github.tmgg/kettle-sdk-java)
 ```
 <dependency>
     <groupId>io.github.tmgg</groupId>
