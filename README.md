@@ -29,7 +29,6 @@ reference pentaho-kettle\engine\src\main\resources\kettle-servlets.xml
 - pauseTrans: Pause or continue a transformation
 - stopTrans: Stop a transformation
 - cleanupTrans: Cleanup a transformation: close remote sockets, ...
-- addTrans: Add a transformation for execution
 - removeTrans: Remove a transformation
 - allocateSocket: Service for the allocation of server sockets
 - listSocket: Lists server socket allocation information
@@ -41,7 +40,6 @@ reference pentaho-kettle\engine\src\main\resources\kettle-servlets.xml
 - startJob: Start a job
 - stopJob: Stop a job
 - jobStatus: Get the status of a job
-- addJob: Add a job to the server
 - removeJob: Remove a job from the server
 
 - executeJob: Execute (prepare and start) a specific job
@@ -52,16 +50,7 @@ reference pentaho-kettle\engine\src\main\resources\kettle-servlets.xml
 - registerPackage: Upload a resources export file
 
 
-- registerSlave: Register a slave server
-- getSlaves: List all registered slave servers
-- stopCarte: Stop Carte Server
-- properties: Get properties from kettle.properties
 
-
-- addExport: Upload a resources export file
-
-
-- nextSequence: Get the next block of values for a sequence
 
 # dev note
 

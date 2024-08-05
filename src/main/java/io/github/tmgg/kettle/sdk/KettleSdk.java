@@ -1,11 +1,12 @@
 package io.github.tmgg.kettle.sdk;
 
 import cn.moon.lang.json.XmlTool;
-import io.github.tmgg.kettle.sdk.response.SlaveServerStatus;
-import io.github.tmgg.kettle.sdk.response.WebResult;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.kevinsawicki.http.HttpRequest;
+import io.github.tmgg.kettle.sdk.response.SlaveServerStatus;
+import io.github.tmgg.kettle.sdk.response.WebResult;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -48,19 +49,15 @@ public class KettleSdk {
 
 
     /**
-     *
      * @param trans
      * @param level
      * @param otherParameters All the other parameters will be sent to the transformation for using as variables. When necessary you can add custom parameters to the request. They will be used to set the transformation variables values..
-     * @return
-     *
-     * https://javadoc.pentaho.com/kettle930/kettle-engine-9.3.0.0-424-javadoc/org/pentaho/di/www/RunTransServlet.html
+     * @return https://javadoc.pentaho.com/kettle930/kettle-engine-9.3.0.0-424-javadoc/org/pentaho/di/www/RunTransServlet.html
      */
-    public Result executeTrans(String trans, LogLevel level,Map<String, Object> otherParameters) {
+    public Result executeTrans(String trans, LogLevel level, Map<String, Object> otherParameters) {
         String url = baseUrl + "/kettle/executeTrans/?rep=" + rep + "&trans=" + trans + "&level=" + level.getCode();
         return common_get(url, otherParameters);
     }
-
 
 
     /***
@@ -74,22 +71,86 @@ public class KettleSdk {
      */
     public Result executeJob(String job, LogLevel level, Map<String, Object> otherParameters) {
         String url = baseUrl + "/kettle/executeJob/?rep=" + rep + "&job=" + job + "&level=" + level.getCode();
-
-
         return common_get(url, otherParameters);
     }
 
+    public Result startJob(String id) {
+        String url = baseUrl + "/kettle/startJob/?id=" + id + "&xml=Y";
+        return common_get(url, null);
+    }
+
+
+    /**
+     * add job to carte server, (not the repo)
+     *
+     * @param jobXml the job file content, such as  xxx.job
+     * @param params the job's params
+     * @return result
+     */
+    public Result registerJob(String jobXml, Map<String, String> params) {
+        String url = baseUrl + "/kettle/registerJob/?xml=Y";
+        if(params == null){
+            params = Collections.emptyMap();
+        }
+
+
+        StringBuilder xml = new StringBuilder();
+
+        xml.append("<job_configuration>");
+        {
+            xml.append("<job_execution_configuration>");
+            {
+                xml.append("<parameters>");
+                for (Map.Entry<String, String> e : params.entrySet()) {
+                    xml.append("<parameter><name>").append(e.getKey())
+                            .append("</name><value>").append(e.getValue())
+                            .append("</value></parameter>");
+                }
+                xml.append("</parameters>");
+            }
+            xml.append("<start_copy_nr>0</start_copy_nr>");
+            xml.append("<clear_log>Y</clear_log>");
+            xml.append("<start_copy_name/>");
+
+            xml.append("</job_execution_configuration>");
+
+            xml.append(jobXml);
+        }
+        xml.append("</job_configuration>");
+
+
+        return common_post_body(url, jobXml);
+    }
+
+
     private Result common_get(String url, Map<String, Object> otherParameters) {
         HttpRequest http = HttpRequest.get(url, otherParameters, true).basic(username, password);
-        if (http.code() == 200) {
+        return common_parse_result(http);
+    }
+
+
+    private Result common_post_body(String url, String bodyContent) {
+        HttpRequest http = HttpRequest.post(url).basic(username, password).contentType("text/xml", "UTF8").send(bodyContent);
+        return common_parse_result(http);
+    }
+
+    private static Result common_parse_result(HttpRequest http) {
+        String body = http.body();
+        System.out.println("response:" + body);
+        boolean hasBody = body != null && !body.isEmpty();
+
+        if (http.code() == 200 && (!hasBody)) {
             return Result.ok();
         }
 
-        String body = http.body();
-        if (body != null && !body.isEmpty()) {
+
+        if (hasBody) {
             try {
                 WebResult webResult = XmlTool.xmlToBean(body, WebResult.class);
-                return Result.err().msg(webResult.getMessage());
+                if ("ERROR".equals(webResult.getResult())) {
+                    return Result.err().msg(webResult.getMessage());
+                }
+                return Result.ok().msg(webResult.getMessage());
             } catch (JsonProcessingException e) {
                 return Result.err().msg(e.getMessage());
             }
