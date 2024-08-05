@@ -89,17 +89,22 @@ public class KettleSdk {
      */
     public Result registerJob(String jobXml, Map<String, String> params) {
         String url = baseUrl + "/kettle/registerJob/?xml=Y";
-        if(params == null){
+        if (params == null) {
             params = Collections.emptyMap();
         }
 
+        jobXml = jobXml.replaceFirst("\\<\\?xml.*>", "");
 
-        StringBuilder xml = new StringBuilder();
+
+        StringBuilder xml = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 
         xml.append("<job_configuration>");
         {
             xml.append("<job_execution_configuration>");
             {
+                xml.append("<exec_local>N</exec_local>");
+                xml.append("<pass_export>N</pass_export>");
+
                 xml.append("<parameters>");
                 for (Map.Entry<String, String> e : params.entrySet()) {
                     xml.append("<parameter><name>").append(e.getKey())
@@ -107,10 +112,19 @@ public class KettleSdk {
                             .append("</value></parameter>");
                 }
                 xml.append("</parameters>");
+
+
+                xml.append("<replay_date/>");
+                xml.append("<safe_mode>N</safe_mode>");
+                xml.append("<log_level>Basic</log_level>");
+                xml.append("<clear_log>Y</clear_log>");
+                xml.append("<start_copy_name/>");
+                xml.append("<start_copy_nr>0</start_copy_nr>");
+                xml.append("<gather_metrics>Y</gather_metrics>");
+                xml.append("<expand_remote_job>N</expand_remote_job>");
+
+
             }
-            xml.append("<start_copy_nr>0</start_copy_nr>");
-            xml.append("<clear_log>Y</clear_log>");
-            xml.append("<start_copy_name/>");
 
             xml.append("</job_execution_configuration>");
 
@@ -119,7 +133,7 @@ public class KettleSdk {
         xml.append("</job_configuration>");
 
 
-        return common_post_body(url, jobXml);
+        return common_post_body(url, xml.toString());
     }
 
 
