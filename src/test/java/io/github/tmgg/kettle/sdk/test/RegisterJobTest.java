@@ -16,8 +16,6 @@ public class RegisterJobTest extends AbstructTest {
 
     public static void main(String[] args) throws IOException {
         KettleSdk sdk = new KettleSdk(url,repo,  username, password);
-
-
         String xml = FileUtils.readFileToString(new File("D:\\job33.kjb"));
 
 
@@ -25,5 +23,6 @@ public class RegisterJobTest extends AbstructTest {
         params.put("filename","okkkkk");
         Result result = sdk.registerJob(xml, params);
         System.out.println(JsonTool.toPrettyJsonQuietly(result));
+
     }
 }
