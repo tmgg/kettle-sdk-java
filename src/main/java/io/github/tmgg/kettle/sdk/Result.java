@@ -11,6 +11,8 @@ public class Result {
 
     String message;
 
+    // jobId, ...
+    String id;
 
 
     public static Result ok(){
