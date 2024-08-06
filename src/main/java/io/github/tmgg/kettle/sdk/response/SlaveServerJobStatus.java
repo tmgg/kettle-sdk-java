@@ -1,8 +1,15 @@
 package io.github.tmgg.kettle.sdk.response;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlCData;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;
+import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlText;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,6 +18,7 @@ import java.util.Date;
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
+@JacksonXmlRootElement(localName = "jobstatus")
 public class SlaveServerJobStatus {
 
   @JacksonXmlProperty(localName = "jobname")
@@ -25,7 +33,6 @@ public class SlaveServerJobStatus {
   @JacksonXmlProperty(localName = "error_desc")
   private String errorDescription;
 
-
   @JacksonXmlProperty(localName = "logging_string")
   private String loggingString;
 
@@ -37,11 +44,14 @@ public class SlaveServerJobStatus {
   @JacksonXmlProperty(localName = "last_log_line_nr")
   private int lastLoggingLineNr;
 
-
+  /**
+   *  远程服务响应的格式： 2024/08/06 10:59:07.031
+   *
+   */
+  @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy/MM/dd HH:mm:ss.sss")
   @JacksonXmlProperty(localName = "log_date")
   private Date logDate;
 
 
-
-
+  private Result result;
 }

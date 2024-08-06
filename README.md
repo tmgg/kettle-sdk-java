@@ -21,7 +21,7 @@ reference pentaho-kettle\engine\src\main\resources\kettle-servlets.xml
 - registerJob: Add a job to the server
 - startJob: Start a job
 - executeJob: Execute (prepare and start) a specific job
-
+- jobStatus: Get the status of a job
 ## todo
 
 - transStatus: The the status of a transformation
@@ -40,7 +40,7 @@ reference pentaho-kettle\engine\src\main\resources\kettle-servlets.xml
 
 
 - stopJob: Stop a job
-- jobStatus: Get the status of a job
+
 - removeJob: Remove a job from the server
 
 

@@ -27,44 +27,50 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class SlaveServerStatus {
-  public static final String XML_TAG = "serverstatus";
+    public static final String XML_TAG = "serverstatus";
 
-  @JacksonXmlProperty(localName = "statusdesc")
-  private String statusDescription;
+    @JacksonXmlProperty(localName = "statusdesc")
+    private String statusDescription;
 
-  private String errorDescription;
+    private String errorDescription;
 
-  @JacksonXmlProperty(localName = "memory_free")
-  private long memoryFree;
+    @JacksonXmlProperty(localName = "memory_free")
+    private long memoryFree;
 
-  @JacksonXmlProperty(localName = "memory_total")
-  private long memoryTotal;
+    @JacksonXmlProperty(localName = "memory_total")
+    private long memoryTotal;
 
-  @JacksonXmlProperty(localName = "cpu_cores")
-  private int cpuCores;
+    @JacksonXmlProperty(localName = "cpu_cores")
+    private int cpuCores;
 
-  @JacksonXmlProperty(localName = "cpu_process_time")
-  private long cpuProcessTime;
+    @JacksonXmlProperty(localName = "cpu_process_time")
+    private long cpuProcessTime;
 
-  private long uptime;
+    private long uptime;
 
-  @JacksonXmlProperty(localName = "thread_count")
-  private int threadCount;
+    @JacksonXmlProperty(localName = "thread_count")
+    private int threadCount;
 
-  @JacksonXmlProperty(localName = "load_avg")
-  private double loadAvg;
+    @JacksonXmlProperty(localName = "load_avg")
+    private double loadAvg;
 
-  @JacksonXmlProperty(localName = "os_name")
-  private String osName;
+    @JacksonXmlProperty(localName = "os_name")
+    private String osName;
 
-  @JacksonXmlProperty(localName = "os_version")
-  private String osVersion;
+    @JacksonXmlProperty(localName = "os_version")
+    private String osVersion;
 
-  @JacksonXmlProperty(localName = "os_arch")
-  private String osArchitecture;
+    @JacksonXmlProperty(localName = "os_arch")
+    private String osArchitecture;
+
+    @JacksonXmlProperty(localName = "jobstatuslist")
+    private List<SlaveServerJobStatus> jobStatusList = new ArrayList<>();
 }

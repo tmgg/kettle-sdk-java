@@ -3,10 +3,13 @@ package io.github.tmgg.kettle.sdk;
 import cn.moon.lang.json.XmlTool;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.kevinsawicki.http.HttpRequest;
+import io.github.tmgg.kettle.sdk.response.SlaveServerJobStatus;
 import io.github.tmgg.kettle.sdk.response.SlaveServerStatus;
 import io.github.tmgg.kettle.sdk.response.WebResult;
 
+import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -77,6 +80,41 @@ public class KettleSdk {
     public Result startJob(String id) {
         String url = baseUrl + "/kettle/startJob/?id=" + id + "&xml=Y";
         return common_get(url, null);
+    }
+    public SlaveServerJobStatus jobStatus(String id, String jobName) {
+        String url = baseUrl + "/kettle/jobStatus/";
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("id",id);
+        params.put("name",jobName);
+        params.put("xml","Y");
+
+        HttpRequest http = HttpRequest.get(url, params, true).basic(username, password);
+
+        String body = http.body();
+        System.out.println(body);
+
+        try {
+            SlaveServerJobStatus jobStatus = XmlTool.xmlToBean(body, SlaveServerJobStatus.class);
+
+            String logStr = jobStatus.getLoggingString();
+            if(logStr!= null){
+               logStr =  logStr.substring("<![CDATA[".length(), logStr.length() - "]]>".length());
+               logStr = logStr.replace("\\\\", "\\");
+                try {
+                    logStr = HttpUtil.decodeBase64ZippedString(logStr);
+                    jobStatus.setLoggingString(logStr);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+
+            }
+
+
+            return jobStatus;
+
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 
