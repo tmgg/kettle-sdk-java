@@ -31,4 +31,9 @@ public class Result {
         this.message = msg;
         return this;
     }
+
+    public Result id(String id){
+        this.id = id;
+        return this;
+    }
 }

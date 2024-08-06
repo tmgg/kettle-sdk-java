@@ -77,9 +77,15 @@ public class KettleSdk {
         return common_get(url, otherParameters);
     }
 
-    public Result startJob(String id) {
-        String url = baseUrl + "/kettle/startJob/?id=" + id + "&xml=Y";
-        return common_get(url, null);
+    public Result startJob(String id,String jobName) {
+        String url = baseUrl + "/kettle/startJob/";
+
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("id",id);
+        params.put("name",jobName);
+        params.put("xml","Y");
+
+        return common_get(url, params);
     }
     public SlaveServerJobStatus jobStatus(String id, String jobName) {
         String url = baseUrl + "/kettle/jobStatus/";
@@ -201,7 +207,7 @@ public class KettleSdk {
                 if ("ERROR".equals(webResult.getResult())) {
                     return Result.err().msg(webResult.getMessage());
                 }
-                return Result.ok().msg(webResult.getMessage());
+                return Result.ok().msg(webResult.getMessage()).id(webResult.getId());
             } catch (JsonProcessingException e) {
                 return Result.err().msg(e.getMessage());
             }
