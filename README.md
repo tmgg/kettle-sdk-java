@@ -1,17 +1,20 @@
 # Usage
 ![版本](https://img.shields.io/maven-central/v/io.github.tmgg/kettle-sdk-java)
-```
+```xml
 <dependency>
     <groupId>io.github.tmgg</groupId>
     <artifactId>kettle-sdk-java</artifactId>
-    <version>版本</version>
+    <version>version</version>
 </dependency>
 ```
 
+```java
+KettleSdk sdk = new KettleSdk(url, repo, username, password);
+SlaveServerStatus status = sdk.status();
+```
 
-# api
 
-reference pentaho-kettle\engine\src\main\resources\kettle-servlets.xml
+
 
 ## done
 
