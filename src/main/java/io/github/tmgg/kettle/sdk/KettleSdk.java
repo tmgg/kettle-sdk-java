@@ -99,7 +99,6 @@ public class KettleSdk {
             String logStr = jobStatus.getLoggingString();
             if(logStr!= null){
                logStr =  logStr.substring("<![CDATA[".length(), logStr.length() - "]]>".length());
-               logStr = logStr.replace("\\\\", "\\");
                 try {
                     logStr = HttpUtil.decodeBase64ZippedString(logStr);
                     jobStatus.setLoggingString(logStr);

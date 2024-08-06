@@ -1,8 +1,8 @@
 package io.github.tmgg.kettle.sdk;
 
-import org.apache.commons.codec.binary.Base64;
-
 import java.io.*;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.zip.GZIPInputStream;
 
 public class HttpUtil {
@@ -16,8 +16,10 @@ public class HttpUtil {
       return "";
     }
     StringWriter writer = new StringWriter();
+
     // base 64 decode
-  byte[] bytes64 = Base64.decodeBase64( loggingString64.getBytes() );
+    // 为了减少依赖，不映入commons-code包，但有换行符，需要下面这种解码方式
+    byte[] bytes64 = Base64.getMimeDecoder().decode(loggingString64.getBytes(StandardCharsets.UTF_8));
 
     // unzip to string encoding-wise
     ByteArrayInputStream zip = new ByteArrayInputStream( bytes64 );
