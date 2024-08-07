@@ -12,6 +12,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.github.kevinsawicki.http.HttpRequest.CHARSET_UTF8;
+
 /**
  * reference
  * https://javadoc.pentaho.com/kettle930/kettle-engine-9.3.0.0-424-javadoc/org/pentaho/di/www/package-summary.html
@@ -180,6 +182,55 @@ public class KettleSdk {
     }
 
 
+    public Result registerTrans(String jobXml, Map<String, String> params) {
+        String url = baseUrl + "/kettle/registerTrans/?xml=Y";
+        if (params == null) {
+            params = Collections.emptyMap();
+        }
+
+        jobXml = jobXml.replaceFirst("\\<\\?xml.*>", "");
+
+
+        StringBuilder xml = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+
+        xml.append("<transformation_configuration>");
+        {
+            xml.append("<transformation_execution_configuration>");
+            {
+                xml.append("<exec_local>N</exec_local>");
+                xml.append("<pass_export>N</pass_export>");
+
+                xml.append("<parameters>");
+                for (Map.Entry<String, String> e : params.entrySet()) {
+                    xml.append("<parameter><name>").append(e.getKey())
+                            .append("</name><value>").append(e.getValue())
+                            .append("</value></parameter>");
+                }
+                xml.append("</parameters>");
+
+
+                xml.append("<replay_date/>");
+                xml.append("<safe_mode>N</safe_mode>");
+                xml.append("<log_level>Basic</log_level>");
+                xml.append("<clear_log>Y</clear_log>");
+                xml.append("<start_copy_name/>");
+                xml.append("<start_copy_nr>0</start_copy_nr>");
+                xml.append("<gather_metrics>Y</gather_metrics>");
+                xml.append("<expand_remote_job>N</expand_remote_job>");
+
+
+            }
+
+            xml.append("</transformation_execution_configuration>");
+
+            xml.append(jobXml);
+        }
+        xml.append("</transformation_configuration>");
+
+
+        return common_post_body(url, xml.toString());
+    }
+
     private Result common_get(String url, Map<String, Object> otherParameters) {
         HttpRequest http = HttpRequest.get(url, otherParameters, true).basic(username, password);
         return common_parse_result(http);
@@ -187,7 +238,7 @@ public class KettleSdk {
 
 
     private Result common_post_body(String url, String bodyContent) {
-        HttpRequest http = HttpRequest.post(url).basic(username, password).contentType("text/xml", "UTF8").send(bodyContent);
+        HttpRequest http = HttpRequest.post(url).basic(username, password).contentType("text/xml", CHARSET_UTF8).send(bodyContent);
         return common_parse_result(http);
     }
 
