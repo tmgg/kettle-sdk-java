@@ -1,16 +1,15 @@
 package io.github.tmgg.kettle.sdk;
 
-import cn.moon.lang.json.XmlTool;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.github.kevinsawicki.http.HttpRequest;
+import io.github.mxvc.jackson.XmlTool;
+import io.github.tmgg.kettle.sdk.plugin.RepTreeItem;
 import io.github.tmgg.kettle.sdk.response.SlaveServerJobStatus;
 import io.github.tmgg.kettle.sdk.response.SlaveServerStatus;
 import io.github.tmgg.kettle.sdk.response.WebResult;
 
 import java.io.IOException;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import static com.github.kevinsawicki.http.HttpRequest.CHARSET_UTF8;
 
@@ -27,9 +26,9 @@ public class KettleSdk {
     private String rep;
 
 
-    public KettleSdk(String url, String repo, String username, String password) {
+    public KettleSdk(String url, String rep, String username, String password) {
         this.baseUrl = url;
-        this.rep = repo;
+        this.rep = rep;
         this.username = username;
         this.password = password;
     }
@@ -79,22 +78,23 @@ public class KettleSdk {
         return common_get(url, otherParameters);
     }
 
-    public Result startJob(String id,String jobName) {
+    public Result startJob(String id, String jobName) {
         String url = baseUrl + "/kettle/startJob/";
 
         HashMap<String, Object> params = new HashMap<>();
-        params.put("id",id);
-        params.put("name",jobName);
-        params.put("xml","Y");
+        params.put("id", id);
+        params.put("name", jobName);
+        params.put("xml", "Y");
 
         return common_get(url, params);
     }
+
     public SlaveServerJobStatus jobStatus(String id, String jobName) {
         String url = baseUrl + "/kettle/jobStatus/";
         HashMap<String, Object> params = new HashMap<>();
-        params.put("id",id);
-        params.put("name",jobName);
-        params.put("xml","Y");
+        params.put("id", id);
+        params.put("name", jobName);
+        params.put("xml", "Y");
 
         HttpRequest http = HttpRequest.get(url, params, true).basic(username, password);
 
@@ -105,8 +105,8 @@ public class KettleSdk {
             SlaveServerJobStatus jobStatus = XmlTool.xmlToBean(body, SlaveServerJobStatus.class);
 
             String logStr = jobStatus.getLoggingString();
-            if(logStr!= null){
-               logStr =  logStr.substring("<![CDATA[".length(), logStr.length() - "]]>".length());
+            if (logStr != null) {
+                logStr = logStr.substring("<![CDATA[".length(), logStr.length() - "]]>".length());
                 try {
                     logStr = HttpUtil.decodeBase64ZippedString(logStr);
                     jobStatus.setLoggingString(logStr);
@@ -178,7 +178,7 @@ public class KettleSdk {
         xml.append("</job_configuration>");
 
 
-        return common_post_body(url, xml.toString());
+        return common_post_body(url, null, xml.toString());
     }
 
 
@@ -213,7 +213,44 @@ public class KettleSdk {
         xml.append("</transformation_configuration>");
 
 
-        return common_post_body(url, xml.toString());
+        return common_post_body(url, null, xml.toString());
+    }
+
+
+    public List<RepTreeItem> getRepObjects() {
+        String url = baseUrl + "/kettle/getRepObjects";
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("xml", "Y");
+        params.put("rep", rep);
+
+        HttpRequest http = HttpRequest.get(url, params, true).basic(username, password);
+
+        if (http.code() != 200) {
+            throw new IllegalStateException(http.code() +": " + http.message());
+        }
+
+        String xml = http.body();
+        List<RepTreeItem> list = XmlTool.xmlToBeanListQuietly(xml, RepTreeItem.class);
+
+        return list;
+    }
+
+    public Result deleteRepObject(String id) {
+        String url = baseUrl + "/kettle/deleteRepObject";
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("xml", "Y");
+        params.put("rep", rep);
+        params.put("id", id);
+
+        return common_get(url, params);
+    }
+    public Result uploadRepObject(String xml) {
+        String url = baseUrl + "/kettle/uploadRepObject/";
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("xml", "Y");
+        params.put("rep", rep);
+
+        return common_post_body(url, params, xml);
     }
 
     private Result common_get(String url, Map<String, Object> otherParameters) {
@@ -222,13 +259,14 @@ public class KettleSdk {
     }
 
 
-    private Result common_post_body(String url, String bodyContent) {
-        HttpRequest http = HttpRequest.post(url).basic(username, password).contentType("text/xml", CHARSET_UTF8).send(bodyContent);
+    private Result common_post_body(String url, Map<String, Object> params, String bodyContent) {
+        HttpRequest http = HttpRequest.post(url, params,true).basic(username, password).contentType("text/xml", CHARSET_UTF8).send(bodyContent);
         return common_parse_result(http);
     }
 
     private static Result common_parse_result(HttpRequest http) {
         String body = http.body();
+        System.out.println("code:" + http.code());
         System.out.println("response:" + body);
         boolean hasBody = body != null && !body.isEmpty();
 

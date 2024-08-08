@@ -6,7 +6,7 @@
 
     <groupId>io.github.tmgg</groupId>
     <artifactId>kettle-sdk-java</artifactId>
-    <version>0.0.6</version>
+    <version>0.0.7</version>
 
     <properties>
         <compile.version>8</compile.version>
@@ -39,9 +39,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>io.github.moon-cn</groupId>
-            <artifactId>commons-lang-json</artifactId>
-            <version>1.0.6</version>
+            <groupId>io.github.mxvc</groupId>
+            <artifactId>commons-lang-jackson</artifactId>
+            <version>1.0.7</version>
         </dependency>
 
         <dependency>
@@ -161,13 +161,13 @@
                         <goals>
                             <goal>sign</goal>
                         </goals>
-                       <!-- <configuration>
-                            &lt;!&ndash; 必须配置，用于 gpg 非交互式密码输入 &ndash;&gt;
+                        <configuration>
+                            <!-- 必须配置，用于 gpg 非交互式密码输入 -->
                             <gpgArguments>
-                                <arg>&#45;&#45;pinentry-mode</arg>
+                                <arg>--pinentry-mode</arg>
                                 <arg>loopback</arg>
                             </gpgArguments>
-                        </configuration>-->
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>

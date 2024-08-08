@@ -1,12 +1,9 @@
 package io.github.tmgg.kettle.sdk.test;
 
-import cn.moon.lang.json.JsonTool;
+import io.github.mxvc.jackson.JsonTool;
 import io.github.tmgg.kettle.sdk.AbstructTest;
-import io.github.tmgg.kettle.sdk.HttpUtil;
 import io.github.tmgg.kettle.sdk.KettleSdk;
-import io.github.tmgg.kettle.sdk.Result;
 import io.github.tmgg.kettle.sdk.response.SlaveServerJobStatus;
-import io.github.tmgg.kettle.sdk.response.SlaveServerStatus;
 
 import java.io.IOException;
 

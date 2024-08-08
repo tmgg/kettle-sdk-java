@@ -1,6 +1,6 @@
 package io.github.tmgg.kettle.sdk.test;
 
-import cn.moon.lang.json.JsonTool;
+import io.github.mxvc.jackson.JsonTool;
 import io.github.tmgg.kettle.sdk.AbstructTest;
 import io.github.tmgg.kettle.sdk.KettleSdk;
 import io.github.tmgg.kettle.sdk.Result;
@@ -22,8 +22,8 @@ public class RegisterJobTransAndRunTest extends AbstructTest {
         Result job_result = sdk.registerJob(job1, null);
         System.out.println(JsonTool.toPrettyJsonQuietly(job_result));
 
-        Result trans_result = sdk.registerTrans(trans1, null);
-        System.out.println(JsonTool.toPrettyJsonQuietly(trans_result));
+      //  Result trans_result = sdk.registerTrans(trans1, null);
+      //  System.out.println(JsonTool.toPrettyJsonQuietly(trans_result));
 
 
         Result startResult = sdk.startJob(job_result.getId(), "job1");
