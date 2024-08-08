@@ -20,6 +20,8 @@ SlaveServerStatus status = sdk.status();
 
 
 
+
+# api
 ## done
 
 - status: Get the status of the server
@@ -29,6 +31,8 @@ SlaveServerStatus status = sdk.status();
 - startJob: Start a job
 - executeJob: Execute (prepare and start) a specific job
 - jobStatus: Get the status of a job
+
+
 ## todo
 
 - transStatus: The the status of a transformation
@@ -57,7 +61,10 @@ SlaveServerStatus status = sdk.status();
 - registerTrans: Add a transformation to the server
 - registerPackage: Upload a resources export file
 
+# manage repository ?
+install the carte plugin from https://github.com/tmgg/kettle-carte-plugin/releases
 
+download and unzip to kettle dir
 
 
 # dev note
