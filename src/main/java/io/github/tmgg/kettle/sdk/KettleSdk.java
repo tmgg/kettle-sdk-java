@@ -8,10 +8,8 @@ import io.github.tmgg.kettle.sdk.response.SlaveServerJobStatus;
 import io.github.tmgg.kettle.sdk.response.SlaveServerStatus;
 import io.github.tmgg.kettle.sdk.response.WebResult;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +23,7 @@ import static com.github.kevinsawicki.http.HttpRequest.CHARSET_UTF8;
  */
 public class KettleSdk {
 
+    private static final String KETTLE_PLUGIN_REPO_OBJ = "/kettle/plugin-repository-object/";
     private String baseUrl;
     private String username;
     private String password;
@@ -223,8 +222,8 @@ public class KettleSdk {
     }
 
 
-    public List<RepTreeItem> getRepObjects() {
-        String url = baseUrl + "/kettle/getRepObjects";
+    public List<RepTreeItem> getRepositoryObjectTree() {
+        String url = baseUrl + KETTLE_PLUGIN_REPO_OBJ + "tree";
         HashMap<String, Object> params = new HashMap<>();
         params.put("xml", "Y");
         params.put("rep", rep);
@@ -241,8 +240,26 @@ public class KettleSdk {
         return list;
     }
 
-    public Result deleteRepObject(String id) {
-        String url = baseUrl + "/kettle/deleteRepObject";
+    public String getRepositoryObjectContent(String id) {
+        String url = baseUrl + KETTLE_PLUGIN_REPO_OBJ + "content";
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("xml", "Y");
+        params.put("rep", rep);
+        params.put("id", id);
+
+        HttpRequest http = HttpRequest.get(url, params, true).basic(username, password);
+
+        if (http.code() != 200) {
+            throw new IllegalStateException(http.code() + ": " + http.message());
+        }
+
+        String xml = http.body();
+
+        return xml;
+    }
+
+    public Result deleteRepositoryObject(String id) {
+        String url = baseUrl + KETTLE_PLUGIN_REPO_OBJ + "delete";
         HashMap<String, Object> params = new HashMap<>();
         params.put("xml", "Y");
         params.put("rep", rep);
@@ -251,8 +268,8 @@ public class KettleSdk {
         return common_get(url, params);
     }
 
-    public Result uploadRepObject(String xml) {
-        String url = baseUrl + "/kettle/uploadRepObject/";
+    public Result uploadRepositoryObject(String xml) {
+        String url = baseUrl + KETTLE_PLUGIN_REPO_OBJ + "upload";
         HashMap<String, Object> params = new HashMap<>();
         params.put("xml", "Y");
         params.put("rep", rep);
@@ -330,7 +347,8 @@ public class KettleSdk {
     private static Result common_parse_result(HttpRequest http) {
         String body = http.body();
         System.out.println("code:" + http.code());
-        System.out.println("response:" + body);
+        System.out.println("message:" + http.message());
+        System.out.println("body:" + body);
         boolean hasBody = body != null && !body.isEmpty();
 
         if (http.code() == 200 && (!hasBody)) {
