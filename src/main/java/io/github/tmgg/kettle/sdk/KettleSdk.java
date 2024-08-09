@@ -10,10 +10,7 @@ import io.github.tmgg.kettle.sdk.response.WebResult;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.github.kevinsawicki.http.HttpRequest.CHARSET_UTF8;
 
@@ -49,6 +46,15 @@ public class KettleSdk {
 
         try {
             SlaveServerStatus serverStatus = XmlTool.xmlToBean(body, SlaveServerStatus.class);
+
+            // 排序
+            List<SlaveServerJobStatus> jobStatusList = serverStatus.getJobStatusList();
+            if (jobStatusList != null && !jobStatusList.isEmpty()) {
+                jobStatusList.sort(Comparator.comparing(SlaveServerJobStatus::getLogDate));
+            }
+
+
+
             return serverStatus;
 
         } catch (JsonProcessingException e) {
@@ -229,15 +235,25 @@ public class KettleSdk {
         params.put("rep", rep);
 
         HttpRequest http = HttpRequest.get(url, params, true).basic(username, password);
+        String body = http.body();
 
-        if (http.code() != 200) {
-            throw new IllegalStateException(http.code() + ": " + http.message());
-        }
+        common_check_result(http, body);
 
-        String xml = http.body();
-        List<RepTreeItem> list = XmlTool.xmlToBeanListQuietly(xml, RepTreeItem.class);
+
+        List<RepTreeItem> list = XmlTool.xmlToBeanListQuietly(body, RepTreeItem.class);
 
         return list;
+    }
+
+    private void common_check_result(HttpRequest http, String body) {
+        if (http.code() == 500) {
+            WebResult webResult = tryParseWebResult(body);
+            throw new KettleSdkException(webResult.getMessage(), http.code(), -1);
+        }
+
+        if (http.code() != 200) {
+            throw new KettleSdkException(http.message(), http.code(), -1);
+        }
     }
 
     public String getRepositoryObjectContent(String id) {
@@ -279,13 +295,13 @@ public class KettleSdk {
 
     public ResultData<byte[]> jobImage(String id, String name) {
         ResultData<byte[]> rs = new ResultData<>();
-        if(id == null || id.isEmpty()){
+        if (id == null || id.isEmpty()) {
             rs.setSuccess(false);
             rs.setMessage("id can't be null or empty");
             return rs;
         }
 
-        if(name == null || name.isEmpty()){
+        if (name == null || name.isEmpty()) {
             rs.setSuccess(false);
             rs.setMessage("name can't be null or empty");
             return rs;
@@ -312,7 +328,7 @@ public class KettleSdk {
         String tmp = new String(content, 0, 20);
         boolean isXml = tmp.startsWith("<webresult>");
 
-        if(!isXml){
+        if (!isXml) {
             rs.setSuccess(true);
             rs.setData(content);
             return rs;
@@ -369,5 +385,15 @@ public class KettleSdk {
         }
 
         return Result.err().msg("request kettle err：" + http.code() + "," + http.message());
+    }
+
+
+    public WebResult tryParseWebResult(String body) {
+        try {
+            return XmlTool.xmlToBean(body, WebResult.class);
+        } catch (JsonProcessingException e) {
+
+        }
+        return null;
     }
 }

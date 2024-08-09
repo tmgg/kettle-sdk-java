@@ -10,7 +10,7 @@ import java.util.List;
 public class GetRepositoryObjectTreeTest extends AbstructTest {
 
     public static void main(String[] args) throws IOException {
-        KettleSdk sdk = new KettleSdk(url,repo, username, password);
+        KettleSdk sdk = new KettleSdk(url,repo+"1", username, password);
 
         List<RepTreeItem> repObjects = sdk.getRepositoryObjectTree();
 
