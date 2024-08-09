@@ -31,7 +31,12 @@ SlaveServerStatus status = sdk.status();
 - startJob: Start a job
 - executeJob: Execute (prepare and start) a specific job
 - jobStatus: Get the status of a job
+- jobImage: Generate a PNG image of a job
 
+## done for kettle carte plugin
+- getRepObjects
+- deleteRepObject
+- uploadRepObject
 
 ## todo
 
@@ -53,10 +58,6 @@ SlaveServerStatus status = sdk.status();
 - stopJob: Stop a job
 
 - removeJob: Remove a job from the server
-
-
-- jobImage: Generate a PNG image of a job
-
 
 - registerTrans: Add a transformation to the server
 - registerPackage: Upload a resources export file

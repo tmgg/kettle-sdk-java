@@ -8,8 +8,14 @@ import io.github.tmgg.kettle.sdk.response.SlaveServerJobStatus;
 import io.github.tmgg.kettle.sdk.response.SlaveServerStatus;
 import io.github.tmgg.kettle.sdk.response.WebResult;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import static com.github.kevinsawicki.http.HttpRequest.CHARSET_UTF8;
 
@@ -226,7 +232,7 @@ public class KettleSdk {
         HttpRequest http = HttpRequest.get(url, params, true).basic(username, password);
 
         if (http.code() != 200) {
-            throw new IllegalStateException(http.code() +": " + http.message());
+            throw new IllegalStateException(http.code() + ": " + http.message());
         }
 
         String xml = http.body();
@@ -244,6 +250,7 @@ public class KettleSdk {
 
         return common_get(url, params);
     }
+
     public Result uploadRepObject(String xml) {
         String url = baseUrl + "/kettle/uploadRepObject/";
         HashMap<String, Object> params = new HashMap<>();
@@ -253,6 +260,62 @@ public class KettleSdk {
         return common_post_body(url, params, xml);
     }
 
+    public ResultData<byte[]> jobImage(String id, String name) {
+        ResultData<byte[]> rs = new ResultData<>();
+        if(id == null || id.isEmpty()){
+            rs.setSuccess(false);
+            rs.setMessage("id can't be null or empty");
+            return rs;
+        }
+
+        if(name == null || name.isEmpty()){
+            rs.setSuccess(false);
+            rs.setMessage("name can't be null or empty");
+            return rs;
+        }
+
+
+        String url = baseUrl + "/kettle/jobImage/";
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("xml", "Y");
+        params.put("id", id);
+        params.put("name", name);
+        HttpRequest http = HttpRequest.get(url, params, true).basic(username, password);
+
+        if (http.code() != 200) {
+            rs.setSuccess(false);
+            rs.setMessage("get job image error:" + http.message());
+            return rs;
+        }
+
+        byte[] content = http.bytes();
+
+        // note: kettle carte will response bytes if success, or xml if error
+        // try check the response content is bytes or xml
+        String tmp = new String(content, 0, 20);
+        boolean isXml = tmp.startsWith("<webresult>");
+
+        if(!isXml){
+            rs.setSuccess(true);
+            rs.setData(content);
+            return rs;
+        }
+
+        // is xml , means that error
+
+        try {
+            String xml = new String(content, StandardCharsets.UTF_8);
+            System.err.println(xml);
+            WebResult webResult = XmlTool.xmlToBean(xml, WebResult.class);
+            rs.setSuccess(false);
+            rs.setMessage(webResult.getMessage());
+            return rs;
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+
     private Result common_get(String url, Map<String, Object> otherParameters) {
         HttpRequest http = HttpRequest.get(url, otherParameters, true).basic(username, password);
         return common_parse_result(http);
@@ -260,7 +323,7 @@ public class KettleSdk {
 
 
     private Result common_post_body(String url, Map<String, Object> params, String bodyContent) {
-        HttpRequest http = HttpRequest.post(url, params,true).basic(username, password).contentType("text/xml", CHARSET_UTF8).send(bodyContent);
+        HttpRequest http = HttpRequest.post(url, params, true).basic(username, password).contentType("text/xml", CHARSET_UTF8).send(bodyContent);
         return common_parse_result(http);
     }
 
