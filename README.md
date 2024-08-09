@@ -22,7 +22,7 @@ SlaveServerStatus status = sdk.status();
 
 
 # api
-## done
+## 已完成
 
 - status: Get the status of the server
 - executeTrans: Execute (prepare and start) a specific transformation and pass output to the servlet
@@ -33,10 +33,10 @@ SlaveServerStatus status = sdk.status();
 - jobStatus: Get the status of a job
 - jobImage: Generate a PNG image of a job
 
-## done for kettle carte plugin
-- getRepObjects
-- deleteRepObject
-- uploadRepObject
+## 已完成插件（kettle carte plugin）接口  
+- getRepObjects  获得存储库对象列表，包括作业和转换
+- deleteRepObject 删除对象，支持作业和转换
+- uploadRepObject 上传对象，支持作业和转换
 
 ## todo
 
