@@ -46,14 +46,11 @@ public class KettleSdk {
 
         try {
             SlaveServerStatus serverStatus = XmlTool.xmlToBean(body, SlaveServerStatus.class);
-
             // 排序
             List<SlaveServerJobStatus> jobStatusList = serverStatus.getJobStatusList();
             if (jobStatusList != null && !jobStatusList.isEmpty()) {
-                jobStatusList.sort(Comparator.comparing(SlaveServerJobStatus::getLogDate));
+                jobStatusList.sort((o1, o2) -> o2.getLogDate().compareTo(o1.getLogDate()));
             }
-
-
 
             return serverStatus;
 
