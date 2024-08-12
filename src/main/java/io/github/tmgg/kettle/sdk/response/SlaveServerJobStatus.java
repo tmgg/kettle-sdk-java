@@ -48,9 +48,8 @@ public class SlaveServerJobStatus {
    *  远程服务响应的格式： 2024/08/06 10:59:07.031
    *
    */
-  @JsonFormat(locale="zh", timezone="GMT+8", pattern="yyyy/MM/dd HH:mm:ss.sss")
   @JacksonXmlProperty(localName = "log_date")
-  private Date logDate;
+  private String logDate;
 
 
   private Result result;

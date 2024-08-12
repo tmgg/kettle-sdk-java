@@ -37,7 +37,7 @@ public class SlaveServerTransStatus {
   private int lastLoggingLineNr;
 
   @JacksonXmlProperty(localName = "log_date")
-  private Date logDate;
+  private String logDate;
 
   @JacksonXmlProperty(localName = "stepstatuslist")
   private List<StepStatus> stepStatusList;

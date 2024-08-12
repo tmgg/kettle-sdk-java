@@ -43,10 +43,10 @@ public class SlaveServerDetection {
   private String active;
 
   @JacksonXmlProperty(localName = "last_active_date")
-  private Date lastActiveDate;
+  private String lastActiveDate;
 
   @JacksonXmlProperty(localName = "last_inactive_date")
-  private Date lastInactiveDate;
+  private String lastInactiveDate;
 
 
 
